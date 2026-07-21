@@ -5,3 +5,8 @@
 body {
   @apply bg-bone text-charcoal;
 }
+
+/* "Butcher's Reserve" — confident serif for headings, Brand Guidelines Section 3 */
+h1, h2, h3 {
+  @apply font-heading;
+}

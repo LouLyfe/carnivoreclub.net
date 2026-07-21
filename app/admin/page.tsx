@@ -35,7 +35,7 @@ export default async function AdminHomePage() {
           <Link
             key={c.label}
             href={c.href}
-            className="rounded-lg border border-charcoal/10 bg-white p-6 hover:border-ember/40"
+            className="rounded-lg border border-charcoal/10 bg-white p-6 hover:border-oxblood/40"
           >
             <p className="text-3xl font-semibold">{c.count}</p>
             <p className="mt-1 text-sm text-charcoal/70">{c.label}</p>

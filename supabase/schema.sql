@@ -287,5 +287,6 @@ insert into categories (name, slug) values
   ('Poultry', 'poultry'),
   ('Pork', 'pork'),
   ('Bone Broth', 'bone-broth'),
-  ('Seafood', 'seafood')
+  ('Seafood', 'seafood'),
+  ('Recipes and Other Products', 'recipes-and-other-products')
 on conflict (slug) do nothing;

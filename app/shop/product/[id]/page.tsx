@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
@@ -15,6 +16,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
   const seller = (product as any).sellers;
   const category = (product as any).categories;
+  const images = product.images ?? [];
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -22,7 +24,24 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
       <h1 className="mt-1 text-2xl font-semibold">{product.name}</h1>
       <p className="mt-1 text-sm text-charcoal/60">Sold by {seller?.business_name}</p>
 
-      <div className="mt-6 aspect-video rounded-lg bg-charcoal/5" />
+      {images.length ? (
+        <div className="mt-6">
+          <div className="relative aspect-video overflow-hidden rounded-lg bg-charcoal/5">
+            <Image src={images[0]} alt={product.name} fill sizes="768px" className="object-cover" priority />
+          </div>
+          {images.length > 1 && (
+            <div className="mt-2 grid grid-cols-6 gap-2">
+              {images.slice(1).map((url: string, i: number) => (
+                <div key={url} className="relative aspect-square overflow-hidden rounded-md bg-charcoal/5">
+                  <Image src={url} alt={`${product.name} photo ${i + 2}`} fill sizes="120px" className="object-cover" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 aspect-video rounded-lg bg-charcoal/5" />
+      )}
 
       <p className="mt-6 text-xl font-medium">${(product.price_cents / 100).toFixed(2)}</p>
       {product.description && <p className="mt-4 text-charcoal/80">{product.description}</p>}

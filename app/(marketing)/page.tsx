@@ -11,7 +11,7 @@ export default function HomePage() {
       </p>
 
       <div className="mt-8 flex justify-center gap-4">
-        <Link href="/shop" className="rounded-md bg-charcoal px-5 py-2.5 text-sm font-medium text-bone hover:bg-charcoal/90">
+        <Link href="/shop" className="rounded-md bg-oxblood px-5 py-2.5 text-sm font-medium text-bone hover:bg-oxblood/90">
           Browse the shop
         </Link>
         <Link href="/standards" className="rounded-md border border-charcoal/20 px-5 py-2.5 text-sm font-medium hover:border-charcoal/40">

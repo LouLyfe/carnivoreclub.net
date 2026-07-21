@@ -32,9 +32,21 @@ export default async function NewProductPage({
         Listings go live only after admin review against the five-pillar checklist.
       </p>
 
-      <form action={createProduct} className="mt-8 flex flex-col gap-4">
+      <form action={createProduct} encType="multipart/form-data" className="mt-8 flex flex-col gap-4">
         <Field label="Product name" name="name" required>
           <input id="name" name="name" required className="rounded-md border border-charcoal/20 px-3 py-2" />
+        </Field>
+
+        <Field label="Photos (up to 7)" name="images">
+          <input
+            id="images"
+            name="images"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            multiple
+            className="rounded-md border border-charcoal/20 px-3 py-2 file:mr-3 file:rounded file:border-0 file:bg-charcoal file:px-3 file:py-1.5 file:text-sm file:text-bone"
+          />
+          <span className="text-xs text-charcoal/60">JPG, PNG, WEBP or GIF, up to 5MB each. Only the first 7 selected will be used.</span>
         </Field>
 
         <Field label="Category" name="category_id">

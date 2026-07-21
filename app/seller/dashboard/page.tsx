@@ -34,7 +34,7 @@ export default async function SellerDashboardPage() {
         {seller.status === 'approved' && (
           <Link
             href="/seller/products/new"
-            className="rounded-md bg-charcoal px-4 py-2 text-sm font-medium text-bone hover:bg-charcoal/90"
+            className="rounded-md bg-oxblood px-4 py-2 text-sm font-medium text-bone hover:bg-oxblood/90"
           >
             + New product
           </Link>

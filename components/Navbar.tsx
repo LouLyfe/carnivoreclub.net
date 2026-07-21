@@ -7,7 +7,7 @@ export default async function Navbar() {
   return (
     <header className="border-b border-charcoal/10 bg-bone">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
+        <Link href="/" className="font-heading text-lg font-semibold tracking-tight text-oxblood">
           Carnivore Club
         </Link>
 

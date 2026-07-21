@@ -9,7 +9,7 @@ export default function SubmitButton({ children }: { children: React.ReactNode }
     <button
       type="submit"
       disabled={pending}
-      className="rounded-md bg-charcoal px-4 py-2 text-sm font-medium text-bone transition hover:bg-charcoal/90 disabled:opacity-50"
+      className="rounded-md bg-oxblood px-4 py-2 text-sm font-medium text-bone transition hover:bg-oxblood/90 disabled:opacity-50"
     >
       {pending ? 'Submitting…' : children}
     </button>

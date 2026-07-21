@@ -13,7 +13,7 @@ export default function Field({
     <div className="flex flex-col gap-1">
       <label htmlFor={name} className="text-sm font-medium">
         {label}
-        {required && <span className="text-ember"> *</span>}
+        {required && <span className="text-oxblood"> *</span>}
       </label>
       {children}
     </div>

@@ -19,7 +19,7 @@ export default async function ShopPage() {
           <Link
             key={c.id}
             href={`/shop/${c.slug}`}
-            className="rounded-full border border-charcoal/20 px-3 py-1 text-sm hover:border-ember/40"
+            className="rounded-full border border-charcoal/20 px-3 py-1 text-sm hover:border-oxblood/40"
           >
             {c.name}
           </Link>
