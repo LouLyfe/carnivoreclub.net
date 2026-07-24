@@ -45,7 +45,7 @@ export default function HomePage() {
         </div>
 
         <div className="relative mx-auto max-w-4xl px-6 py-28 text-center text-bone">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">100% animal-based. Not keto, not paleo — carnivore.</p>
+          <p className="font-heading text-2xl font-medium uppercase tracking-[0.12em] text-gold sm:text-3xl">100% animal-based. Not keto, not paleo — carnivore.</p>
           <h1 className="mt-4 font-heading text-4xl leading-tight sm:text-5xl">
             The only marketplace where every product has already been through our approval process.
           </h1>

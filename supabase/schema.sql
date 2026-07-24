@@ -242,10 +242,13 @@ create policy "products: approved seller can create" on products
         and sellers.status = 'approved'
     )
   );
-create policy "products: seller can update own draft/pending" on products
+-- Sellers can update their own product regardless of current status —
+-- the app resets status to 'pending_review' whenever an approved listing
+-- is edited, so it goes back through admin review rather than silently
+-- changing a live listing.
+create policy "products: seller can update own" on products
   for update using (
     exists (select 1 from sellers where sellers.id = products.seller_id and sellers.profile_id = auth.uid())
-    and status in ('draft', 'pending_review', 'on_hold', 'rejected')
   );
 create policy "products: admin can update any" on products
   for update using (private.is_admin());
@@ -290,3 +293,47 @@ insert into categories (name, slug) values
   ('Seafood', 'seafood'),
   ('Recipes and Other Products', 'recipes-and-other-products')
 on conflict (slug) do nothing;
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Storage: product photos (up to 7 per listing)
+-- ─────────────────────────────────────────────────────────────────────────
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'product-images',
+  'product-images',
+  true,
+  5242880, -- 5MB per file
+  array['image/jpeg','image/png','image/webp','image/gif']
+)
+on conflict (id) do nothing;
+
+create policy "product images: public read" on storage.objects
+  for select using (bucket_id = 'product-images');
+
+create policy "product images: seller can upload to own folder" on storage.objects
+  for insert with check (
+    bucket_id = 'product-images'
+    and exists (
+      select 1 from sellers
+      where sellers.profile_id = auth.uid()
+        and sellers.status = 'approved'
+        and sellers.id::text = (storage.foldername(name))[1]
+    )
+  );
+
+create policy "product images: seller can delete own" on storage.objects
+  for delete using (
+    bucket_id = 'product-images'
+    and exists (
+      select 1 from sellers
+      where sellers.profile_id = auth.uid()
+        and sellers.id::text = (storage.foldername(name))[1]
+    )
+  );
+
+-- Admin corrections to a listing (Section: seller/admin edit flows) may
+-- add photos on a seller's behalf, e.g. when fixing up a listing directly.
+create policy "product images: admin can upload" on storage.objects
+  for insert with check (
+    bucket_id = 'product-images' and private.is_admin()
+  );

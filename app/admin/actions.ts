@@ -83,3 +83,71 @@ export async function decideProduct(formData: FormData) {
   revalidatePath('/admin/products');
   redirect('/admin/products');
 }
+
+const MAX_PRODUCT_IMAGES = 7;
+
+// Lets an admin correct a listing directly (e.g. a seller's spelling
+// mistake) without a full reject → resubmit → re-review cycle. Unlike a
+// seller's own edit, this does NOT change the product's status — the
+// admin making the correction is itself the review.
+export async function editProduct(formData: FormData) {
+  const { supabase } = await requireAdmin();
+
+  const productId = formData.get('product_id') as string;
+
+  const { data: existing } = await supabase
+    .from('products')
+    .select('id, images')
+    .eq('id', productId)
+    .maybeSingle();
+
+  if (!existing) redirect('/admin/products');
+
+  const name = formData.get('name') as string;
+  const description = (formData.get('description') as string) || null;
+  const priceDollars = parseFloat(formData.get('price') as string);
+  const category_id = (formData.get('category_id') as string) || null;
+  const animal_raising_standard = (formData.get('animal_raising_standard') as string) || null;
+  const ingredients_list = (formData.get('ingredients_list') as string) || null;
+  const cold_chain_method = (formData.get('cold_chain_method') as string) || null;
+  const shelf_life = (formData.get('shelf_life') as string) || null;
+
+  const removeUrls = new Set(formData.getAll('remove_image'));
+  const keptImages = (existing.images ?? []).filter((url: string) => !removeUrls.has(url));
+
+  const remainingSlots = Math.max(0, MAX_PRODUCT_IMAGES - keptImages.length);
+  const newFiles = formData
+    .getAll('images')
+    .filter((f): f is File => f instanceof File && f.size > 0)
+    .slice(0, remainingSlots);
+
+  const newUrls: string[] = [];
+  for (const file of newFiles) {
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `${existing.id}/admin-${crypto.randomUUID()}.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from('product-images')
+      .upload(path, file, { contentType: file.type });
+    if (!uploadError) {
+      const { data: publicUrl } = supabase.storage.from('product-images').getPublicUrl(path);
+      newUrls.push(publicUrl.publicUrl);
+    }
+  }
+
+  const update: Record<string, unknown> = {
+    category_id,
+    animal_raising_standard,
+    ingredients_list,
+    cold_chain_method,
+    shelf_life,
+    images: [...keptImages, ...newUrls],
+  };
+  if (name) update.name = name;
+  if (!Number.isNaN(priceDollars)) update.price_cents = Math.round(priceDollars * 100);
+  update.description = description;
+
+  await supabase.from('products').update(update).eq('id', productId);
+
+  revalidatePath(`/admin/products/${productId}`);
+  redirect(`/admin/products/${productId}`);
+}

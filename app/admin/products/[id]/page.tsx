@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
-import { decideProduct } from '../../actions';
+import { decideProduct, editProduct } from '../../actions';
 import StatusBadge from '@/components/StatusBadge';
+import Field from '@/components/form/Field';
 
 const PILLARS = [
   { key: 'animal_raising', label: 'Animal raising standard meets published criteria' },
@@ -26,12 +28,16 @@ export default async function AdminProductDetailPage({ params }: { params: { id:
     .single();
   if (!product) notFound();
 
+  const { data: categories } = await supabase.from('categories').select('*').order('name');
+
   const { data: history } = await supabase
     .from('approval_reviews')
     .select('*')
     .eq('target_type', 'product')
     .eq('target_id', params.id)
     .order('created_at', { ascending: false });
+
+  const images: string[] = product.images ?? [];
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
@@ -42,6 +48,20 @@ export default async function AdminProductDetailPage({ params }: { params: { id:
         </div>
         <StatusBadge status={product.status} />
       </div>
+
+      {images.length > 0 ? (
+        <div className="mt-6 grid grid-cols-4 gap-2 sm:grid-cols-6">
+          {images.map((url) => (
+            <div key={url} className="relative aspect-square overflow-hidden rounded-md bg-charcoal/5">
+              <Image src={url} alt="" fill sizes="150px" className="object-cover" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-6 rounded-md bg-amber-50 p-3 text-sm text-amber-800">
+          No photos uploaded for this listing yet.
+        </p>
+      )}
 
       <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
         <dt className="text-charcoal/60">Price</dt><dd>${(product.price_cents / 100).toFixed(2)}</dd>
@@ -54,7 +74,86 @@ export default async function AdminProductDetailPage({ params }: { params: { id:
         <p className="mt-4 text-sm text-charcoal/70">{product.description}</p>
       )}
 
-      <form action={decideProduct} className="mt-10 flex flex-col gap-4 rounded-lg border border-charcoal/10 bg-white p-6">
+      <details className="mt-8 rounded-lg border border-charcoal/10 bg-white">
+        <summary className="cursor-pointer px-6 py-4 text-sm font-medium">
+          Edit listing details (fix a typo or swap a photo — doesn't change approval status)
+        </summary>
+        <form action={editProduct} encType="multipart/form-data" className="flex flex-col gap-4 border-t border-charcoal/10 p-6">
+          <input type="hidden" name="product_id" value={product.id} />
+
+          <Field label="Product name" name="name">
+            <input id="name" name="name" defaultValue={product.name} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          {images.length > 0 && (
+            <Field label="Current photos" name="existing_images">
+              <div className="grid grid-cols-4 gap-2">
+                {images.map((url) => (
+                  <label key={url} className="block cursor-pointer">
+                    <div className="relative aspect-square overflow-hidden rounded-md bg-charcoal/5">
+                      <Image src={url} alt="" fill sizes="100px" className="object-cover" />
+                    </div>
+                    <div className="mt-1 flex items-center gap-1 text-xs text-charcoal/70">
+                      <input type="checkbox" name="remove_image" value={url} className="h-3.5 w-3.5" />
+                      Remove
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </Field>
+          )}
+
+          <Field label="Add photos on the seller's behalf" name="images">
+            <input
+              id="images"
+              name="images"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              multiple
+              className="rounded-md border border-charcoal/20 px-3 py-2 file:mr-3 file:rounded file:border-0 file:bg-charcoal file:px-3 file:py-1.5 file:text-sm file:text-bone"
+            />
+          </Field>
+
+          <Field label="Category" name="category_id">
+            <select id="category_id" name="category_id" defaultValue={product.category_id ?? ''} className="rounded-md border border-charcoal/20 px-3 py-2">
+              <option value="">Select a category</option>
+              {categories?.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </Field>
+
+          <Field label="Description" name="description">
+            <textarea id="description" name="description" rows={3} defaultValue={product.description ?? ''} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          <Field label="Price (AUD)" name="price">
+            <input id="price" name="price" type="number" step="0.01" min="0" defaultValue={(product.price_cents / 100).toFixed(2)} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          <Field label="Animal raising standard" name="animal_raising_standard">
+            <input id="animal_raising_standard" name="animal_raising_standard" defaultValue={product.animal_raising_standard ?? ''} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          <Field label="Ingredients list" name="ingredients_list">
+            <textarea id="ingredients_list" name="ingredients_list" rows={2} defaultValue={product.ingredients_list ?? ''} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          <Field label="Cold chain method" name="cold_chain_method">
+            <input id="cold_chain_method" name="cold_chain_method" defaultValue={product.cold_chain_method ?? ''} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          <Field label="Shelf life" name="shelf_life">
+            <input id="shelf_life" name="shelf_life" defaultValue={product.shelf_life ?? ''} className="rounded-md border border-charcoal/20 px-3 py-2" />
+          </Field>
+
+          <button type="submit" className="self-start rounded-md bg-charcoal px-4 py-2 text-sm font-medium text-bone hover:bg-charcoal/90">
+            Save corrections
+          </button>
+        </form>
+      </details>
+
+      <form action={decideProduct} className="mt-6 flex flex-col gap-4 rounded-lg border border-charcoal/10 bg-white p-6">
         <input type="hidden" name="product_id" value={product.id} />
         <h2 className="font-medium">Five-pillar checklist</h2>
 

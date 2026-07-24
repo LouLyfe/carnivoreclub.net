@@ -59,7 +59,12 @@ export default async function SellerDashboardPage() {
                 <p className="font-medium">{p.name}</p>
                 <p className="text-sm text-charcoal/60">${(p.price_cents / 100).toFixed(2)}</p>
               </div>
-              <StatusBadge status={p.status} />
+              <div className="flex items-center gap-3">
+                <StatusBadge status={p.status} />
+                <Link href={`/seller/products/${p.id}/edit`} className="text-sm text-oxblood underline underline-offset-4">
+                  Edit
+                </Link>
+              </div>
             </div>
           ))}
         </div>
