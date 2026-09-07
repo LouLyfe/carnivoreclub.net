@@ -41,7 +41,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-charcoal/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/75 to-oxblood/85" />
         </div>
 
         <div className="relative mx-auto max-w-4xl px-6 py-28 text-center text-bone">
