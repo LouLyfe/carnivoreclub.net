@@ -64,6 +64,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Founder story video */}
+      <section className="bg-charcoal py-20 text-bone">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <h2 className="font-heading text-2xl">This is what food alone can do.</h2>
+          <p className="mt-3 text-bone/70">
+            Real food. Rigorously approved. A community that never has to look anywhere else.
+          </p>
+        </div>
+        <div className="mx-auto mt-10 max-w-4xl px-6">
+          <div className="relative aspect-video overflow-hidden rounded-lg bg-black">
+            <video className="h-full w-full object-cover" controls playsInline preload="metadata">
+              <source src="/videos/founder-story.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p className="mt-3 text-center text-xs text-bone/50">Individual results may vary. Not medical advice.</p>
+        </div>
+        <div className="mt-6 text-center">
+          <Link href="/standards" className="text-sm text-gold underline underline-offset-4">
+            See what&apos;s approved →
+          </Link>
+        </div>
+      </section>
+
       {/* Differentiator */}
       <section className="mx-auto max-w-3xl px-6 py-20 text-center">
         <h2 className="font-heading text-2xl">Not selection. It's rejection.</h2>
