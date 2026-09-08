@@ -24,6 +24,16 @@ const CATEGORIES = [
     slug: 'bone-broth',
     image: 'https://d8j0ntlcm91z4.cloudfront.net/user_3Ah1q0gKm81u5hmbamyNGMsLZHW/hf_20260721_054738_e3a7aa7f-c756-4679-be20-5aaa3e4855e5.png',
   },
+  {
+    name: 'Household Products',
+    slug: 'household-products',
+    image: 'https://d8j0ntlcm91z4.cloudfront.net/user_3Ah1q0gKm81u5hmbamyNGMsLZHW/hf_20260908_124720_5b27dd51-2942-4625-8c05-927401400c94.png',
+  },
+  {
+    name: 'Recipes and Miscellaneous',
+    slug: 'recipes-and-other-products',
+    image: 'https://d8j0ntlcm91z4.cloudfront.net/user_3Ah1q0gKm81u5hmbamyNGMsLZHW/hf_20260908_124738_a7a62b2e-f11e-42d5-97fa-5247d7f448a1.png',
+  },
 ];
 
 const PILLARS = [
@@ -134,7 +144,7 @@ export default function HomePage() {
       {/* Categories */}
       <section className="mx-auto max-w-5xl px-6 py-20">
         <h2 className="font-heading text-center text-3xl md:text-4xl">Shop by category</h2>
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {CATEGORIES.map((c) => (
             <Link key={c.slug} href={`/shop/${c.slug}`} className="group block">
               <div className="relative aspect-square overflow-hidden rounded-lg bg-charcoal/5">

@@ -291,7 +291,8 @@ insert into categories (name, slug) values
   ('Pork', 'pork'),
   ('Bone Broth', 'bone-broth'),
   ('Seafood', 'seafood'),
-  ('Recipes and Other Products', 'recipes-and-other-products')
+  ('Recipes and Other Products', 'recipes-and-other-products'),
+  ('Household Products', 'household-products')
 on conflict (slug) do nothing;
 
 -- ─────────────────────────────────────────────────────────────────────────
