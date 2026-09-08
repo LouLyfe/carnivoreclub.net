@@ -41,15 +41,15 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/75 to-oxblood/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/35 to-charcoal/75" />
         </div>
 
         <div className="relative mx-auto max-w-4xl px-6 py-28 text-center text-bone">
           <p className="font-heading text-2xl font-medium uppercase tracking-[0.12em] text-gold sm:text-3xl">100% animal-based. Not keto, not paleo — carnivore.</p>
-          <h1 className="mt-4 font-heading text-4xl leading-tight sm:text-5xl">
+          <h1 className="mt-6 font-heading text-4xl leading-tight md:text-6xl lg:text-7xl">
             The only marketplace where every product has already been through our approval process.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-bone/80">
+          <p className="mx-auto mt-6 max-w-3xl text-2xl text-bone/80 md:text-3xl">
             So you don't have to read another label. Every seller and every listing on Carnivore Club is checked against a published five-pillar standard before it ever goes live.
           </p>
 
@@ -67,8 +67,8 @@ export default function HomePage() {
       {/* Founder story video */}
       <section className="bg-charcoal py-20 text-bone">
         <div className="mx-auto max-w-2xl px-6 text-center">
-          <h2 className="font-heading text-2xl">This is what food alone can do.</h2>
-          <p className="mt-3 text-bone/70">
+          <h2 className="font-heading text-4xl md:text-5xl">This is what food alone can do.</h2>
+          <p className="mt-4 text-xl text-bone/70 md:text-2xl">
             Real food. Rigorously approved. A community that never has to look anywhere else.
           </p>
         </div>
@@ -89,8 +89,8 @@ export default function HomePage() {
 
       {/* Differentiator */}
       <section className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <h2 className="font-heading text-2xl">Not selection. It's rejection.</h2>
-        <p className="mt-4 text-charcoal/70">
+        <h2 className="font-heading text-4xl md:text-5xl">Not selection. It's rejection.</h2>
+        <p className="mt-5 text-xl text-charcoal/70 md:text-2xl">
           Endless choice is easy to find — Amazon, Instagram, and every farmers'-market directory already give you that.
           What's missing is a trusted filter. Carnivore Club's job is to do the rejecting, so if it's on the site, it has
           already passed the test.
@@ -100,7 +100,7 @@ export default function HomePage() {
       {/* Five pillars */}
       <section className="bg-charcoal py-20 text-bone">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="font-heading text-center text-2xl">Every listing clears five pillars — no exceptions</h2>
+          <h2 className="font-heading text-center text-4xl md:text-5xl">Every listing clears five pillars — no exceptions</h2>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {PILLARS.map((p, i) => (
               <div key={p.title} className="rounded-lg border border-bone/10 p-5">
@@ -120,7 +120,7 @@ export default function HomePage() {
 
       {/* Categories */}
       <section className="mx-auto max-w-5xl px-6 py-20">
-        <h2 className="font-heading text-center text-2xl">Shop by category</h2>
+        <h2 className="font-heading text-center text-4xl md:text-5xl">Shop by category</h2>
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {CATEGORIES.map((c) => (
             <Link key={c.slug} href={`/shop/${c.slug}`} className="group block">
@@ -147,7 +147,7 @@ export default function HomePage() {
       {/* Trust badges */}
       <section className="border-t border-charcoal/10 bg-bone py-20">
         <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-heading text-2xl">A trust shortcut, right on every listing</h2>
+          <h2 className="font-heading text-4xl md:text-5xl">A trust shortcut, right on every listing</h2>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Approved</span>
             <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Club Selection</span>
@@ -163,8 +163,8 @@ export default function HomePage() {
       {/* Seller CTA */}
       <section className="bg-oxblood py-16 text-center text-bone">
         <div className="mx-auto max-w-2xl px-6">
-          <h2 className="font-heading text-2xl">Producing something that belongs here?</h2>
-          <p className="mt-3 text-bone/80">
+          <h2 className="font-heading text-4xl md:text-5xl">Producing something that belongs here?</h2>
+          <p className="mt-4 text-xl text-bone/80 md:text-2xl">
             Regenerative farms, tallow renderers, organ-meat specialists, bone broth makers — if it's genuinely
             carnivore and you can back it up, we want to hear from you.
           </p>
