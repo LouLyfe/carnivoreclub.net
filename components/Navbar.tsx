@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getCurrentProfile } from '@/lib/supabase/server';
 
 export default async function Navbar() {
@@ -7,8 +8,11 @@ export default async function Navbar() {
   return (
     <header className="border-b border-charcoal/10 bg-bone">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-heading text-lg font-semibold tracking-tight text-oxblood">
-          Carnivore Club
+        <Link href="/" className="flex items-center gap-2.5">
+          <Image src="/logo-icon.png" alt="" width={44} height={44} className="h-11 w-11" priority />
+          <span className="font-heading text-lg font-semibold tracking-tight text-oxblood">
+            Carnivore Club
+          </span>
         </Link>
 
         <div className="flex items-center gap-6 text-sm">
