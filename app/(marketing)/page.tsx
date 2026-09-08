@@ -45,11 +45,11 @@ export default function HomePage() {
         </div>
 
         <div className="relative mx-auto max-w-4xl px-6 py-28 text-center text-bone">
-          <p className="font-heading text-2xl font-medium uppercase tracking-[0.12em] text-gold sm:text-3xl">100% animal-based. Not keto, not paleo — carnivore.</p>
-          <h1 className="mt-6 font-heading text-4xl leading-tight md:text-6xl lg:text-7xl">
+          <p className="font-heading text-sm font-bold uppercase tracking-[0.12em] text-gold md:text-base">100% animal-based. Not keto, not paleo — carnivore.</p>
+          <h1 className="mt-4 font-heading text-4xl leading-tight md:text-5xl">
             The only marketplace where every product has already been through our approval process.
           </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-2xl text-bone/80 md:text-3xl">
+          <p className="mx-auto mt-5 max-w-xl text-base text-bone/80 md:text-lg">
             So you don't have to read another label. Every seller and every listing on Carnivore Club is checked against a published five-pillar standard before it ever goes live.
           </p>
 
