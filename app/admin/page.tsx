@@ -4,11 +4,12 @@ import { createClient } from '@/lib/supabase/server';
 export default async function AdminHomePage() {
   const supabase = createClient();
 
-  const [{ count: pendingSellers }, { count: pendingProducts }, { count: pendingRecipes }] =
+  const [{ count: pendingSellers }, { count: pendingProducts }, { count: pendingRecipes }, { count: pendingMeetups }] =
     await Promise.all([
       supabase.from('sellers').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
       supabase.from('products').select('*', { count: 'exact', head: true }).eq('status', 'pending_review'),
       supabase.from('recipes').select('*', { count: 'exact', head: true }).eq('status', 'pending_review'),
+      supabase.from('meetups').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
     ]);
 
   const soon = new Date();
@@ -24,13 +25,14 @@ export default async function AdminHomePage() {
     { label: 'Sellers awaiting review', count: pendingSellers ?? 0, href: '/admin/sellers' },
     { label: 'Products awaiting review', count: pendingProducts ?? 0, href: '/admin/products' },
     { label: 'Recipes awaiting review', count: pendingRecipes ?? 0, href: '/admin/recipes' },
+    { label: 'Meetups awaiting review', count: pendingMeetups ?? 0, href: '/admin/meetups' },
   ];
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <h1 className="text-2xl font-semibold">Admin — approval queue</h1>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
           <Link
             key={c.label}

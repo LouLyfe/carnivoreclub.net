@@ -1,8 +1,16 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
+import { addToCart } from '@/app/cart/actions';
+import SubmitButton from '@/components/form/SubmitButton';
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
+export default async function ProductDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { added?: string };
+}) {
   const supabase = createClient();
 
   const { data: product } = await supabase
@@ -65,9 +73,23 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         </div>
       </dl>
 
-      <p className="mt-8 rounded-md bg-amber-50 p-3 text-sm text-amber-800">
-        Cart and checkout ship in Phase B.
-      </p>
+      {searchParams.added && (
+        <p className="mt-8 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+          Added to your cart.
+        </p>
+      )}
+
+      <form action={addToCart} className="mt-8 flex items-center gap-3">
+        <input type="hidden" name="product_id" value={product.id} />
+        <input
+          name="quantity"
+          type="number"
+          min="1"
+          defaultValue={1}
+          className="w-20 rounded-md border border-charcoal/20 px-3 py-2 text-sm"
+        />
+        <SubmitButton>Add to cart</SubmitButton>
+      </form>
     </div>
   );
 }

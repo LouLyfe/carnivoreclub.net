@@ -84,6 +84,32 @@ export async function decideProduct(formData: FormData) {
   redirect('/admin/products');
 }
 
+export async function decideMeetup(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+
+  const meetupId = formData.get('meetup_id') as string;
+  const decision = formData.get('decision') as Decision;
+  const notes = (formData.get('notes') as string) || null;
+
+  // Meetups only have two real outcomes — map 'on_hold' away since the
+  // meetups.status check constraint doesn't include it.
+  const status = decision === 'approved' ? 'approved' : 'rejected';
+
+  await supabase.from('meetups').update({ status }).eq('id', meetupId);
+
+  await supabase.from('approval_reviews').insert({
+    target_type: 'meetup',
+    target_id: meetupId,
+    reviewer_id: adminId,
+    pillar_scores: {},
+    decision: status,
+    notes,
+  });
+
+  revalidatePath('/admin/meetups');
+  redirect('/admin/meetups');
+}
+
 const MAX_PRODUCT_IMAGES = 7;
 
 // Lets an admin correct a listing directly (e.g. a seller's spelling

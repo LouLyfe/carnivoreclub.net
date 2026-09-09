@@ -31,8 +31,10 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAdminRoute = path.startsWith('/admin');
   const isSellerRoute = path.startsWith('/seller/dashboard') || path.startsWith('/seller/products');
+  const isMembersRoute = path.startsWith('/members');
+  const isCartRoute = path.startsWith('/cart');
 
-  if ((isAdminRoute || isSellerRoute) && !user) {
+  if ((isAdminRoute || isSellerRoute || isMembersRoute || isCartRoute) && !user) {
     const redirectUrl = new URL('/login', request.url);
     redirectUrl.searchParams.set('redirect', path);
     return NextResponse.redirect(redirectUrl);
@@ -54,5 +56,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/seller/dashboard/:path*', '/seller/products/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/seller/dashboard/:path*',
+    '/seller/products/:path*',
+    '/members/:path*',
+    '/cart/:path*',
+  ],
 };

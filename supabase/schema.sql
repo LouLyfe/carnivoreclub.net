@@ -164,7 +164,7 @@ create table if not exists recipes (
 -- ─────────────────────────────────────────────────────────────────────────
 create table if not exists approval_reviews (
   id             uuid primary key default gen_random_uuid(),
-  target_type    text not null check (target_type in ('seller', 'product', 'recipe')),
+  target_type    text not null check (target_type in ('seller', 'product', 'recipe', 'meetup')),
   target_id      uuid not null,
   reviewer_id    uuid not null references profiles(id),
   pillar_scores  jsonb not null default '{}',
@@ -174,6 +174,84 @@ create table if not exists approval_reviews (
 );
 
 create index if not exists approval_reviews_target_idx on approval_reviews(target_type, target_id);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- memberships — paid club membership. Stripe isn't connected to this
+-- project yet, so status starts 'pending_payment' on signup; flip to
+-- 'active' once real billing is wired up (webhook or admin action).
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists memberships (
+  id          uuid primary key default gen_random_uuid(),
+  profile_id  uuid not null unique references profiles(id) on delete cascade,
+  tier        text not null default 'standard',
+  status      text not null default 'pending_payment'
+                check (status in ('pending_payment', 'active', 'cancelled')),
+  created_at  timestamptz not null default now()
+);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- cart_items — a buyer's current (pre-checkout) cart
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists cart_items (
+  id          uuid primary key default gen_random_uuid(),
+  profile_id  uuid not null references profiles(id) on delete cascade,
+  product_id  uuid not null references products(id) on delete cascade,
+  quantity    integer not null check (quantity > 0),
+  created_at  timestamptz not null default now(),
+  unique (profile_id, product_id)
+);
+
+create index if not exists cart_items_profile_id_idx on cart_items(profile_id);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- community_posts / community_comments — members-only discussion feed
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists community_posts (
+  id          uuid primary key default gen_random_uuid(),
+  author_id   uuid not null references profiles(id) on delete cascade,
+  body        text not null,
+  created_at  timestamptz not null default now()
+);
+
+create table if not exists community_comments (
+  id          uuid primary key default gen_random_uuid(),
+  post_id     uuid not null references community_posts(id) on delete cascade,
+  author_id   uuid not null references profiles(id) on delete cascade,
+  body        text not null,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists community_comments_post_id_idx on community_comments(post_id);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- meetups / meetup_rsvps — member-hosted local meetups & dinners.
+-- Same vetting pattern as sellers/products: hosted as 'pending', only
+-- visible to members once an admin approves it (approval_reviews row,
+-- target_type = 'meetup').
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists meetups (
+  id           uuid primary key default gen_random_uuid(),
+  host_id      uuid not null references profiles(id) on delete cascade,
+  title        text not null,
+  description  text,
+  location     text not null,
+  event_at     timestamptz not null,
+  capacity     integer,
+  status       text not null default 'pending'
+                 check (status in ('pending', 'approved', 'rejected')),
+  created_at   timestamptz not null default now()
+);
+
+create table if not exists meetup_rsvps (
+  id          uuid primary key default gen_random_uuid(),
+  meetup_id   uuid not null references meetups(id) on delete cascade,
+  profile_id  uuid not null references profiles(id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  unique (meetup_id, profile_id)
+);
+
+create index if not exists meetups_status_idx on meetups(status);
+create index if not exists meetup_rsvps_meetup_id_idx on meetup_rsvps(meetup_id);
 
 -- ─────────────────────────────────────────────────────────────────────────
 -- Row Level Security
@@ -187,6 +265,12 @@ alter table order_items       enable row level security;
 alter table reviews           enable row level security;
 alter table recipes           enable row level security;
 alter table approval_reviews  enable row level security;
+alter table memberships         enable row level security;
+alter table cart_items          enable row level security;
+alter table community_posts     enable row level security;
+alter table community_comments  enable row level security;
+alter table meetups             enable row level security;
+alter table meetup_rsvps        enable row level security;
 
 -- Helper: is the current user an admin? (private schema — not a public RPC)
 create or replace function private.is_admin()
@@ -198,6 +282,18 @@ as $$
   select exists (
     select 1 from profiles where id = auth.uid() and role = 'admin'
   );
+$$;
+
+-- Helper: does the current user have a membership row at all (regardless of
+-- payment status)? Gates the members-only area — see memberships table
+-- comment re: Stripe not being connected yet.
+create or replace function private.is_member()
+returns boolean
+language sql
+security definer set search_path = public
+stable
+as $$
+  select exists (select 1 from memberships where profile_id = auth.uid());
 $$;
 
 -- profiles
@@ -265,6 +361,10 @@ create policy "order_items: buyer or seller or admin can read" on order_items
     or exists (select 1 from orders where orders.id = order_items.order_id and orders.buyer_id = auth.uid())
     or exists (select 1 from sellers where sellers.id = order_items.seller_id and sellers.profile_id = auth.uid())
   );
+create policy "order_items: buyer can insert for own order" on order_items
+  for insert with check (
+    exists (select 1 from orders where orders.id = order_items.order_id and orders.buyer_id = auth.uid())
+  );
 
 create policy "reviews: public read" on reviews
   for select using (true);
@@ -279,6 +379,63 @@ create policy "recipes: admin write" on recipes
 -- approval_reviews: admin only
 create policy "approval_reviews: admin only" on approval_reviews
   for all using (private.is_admin());
+
+-- memberships
+create policy "memberships: owner or admin can read" on memberships
+  for select using (auth.uid() = profile_id or private.is_admin());
+create policy "memberships: user can create own" on memberships
+  for insert with check (auth.uid() = profile_id);
+create policy "memberships: admin can update any" on memberships
+  for update using (private.is_admin());
+
+-- cart_items (owner-only, full CRUD)
+create policy "cart_items: owner can read" on cart_items
+  for select using (auth.uid() = profile_id);
+create policy "cart_items: owner can insert" on cart_items
+  for insert with check (auth.uid() = profile_id);
+create policy "cart_items: owner can update" on cart_items
+  for update using (auth.uid() = profile_id);
+create policy "cart_items: owner can delete" on cart_items
+  for delete using (auth.uid() = profile_id);
+
+-- community_posts / community_comments (members-only)
+create policy "community_posts: members can read" on community_posts
+  for select using (private.is_member() or private.is_admin());
+create policy "community_posts: members can create own" on community_posts
+  for insert with check (auth.uid() = author_id and private.is_member());
+create policy "community_posts: admin can manage all" on community_posts
+  for all using (private.is_admin());
+
+create policy "community_comments: members can read" on community_comments
+  for select using (private.is_member() or private.is_admin());
+create policy "community_comments: members can create own" on community_comments
+  for insert with check (auth.uid() = author_id and private.is_member());
+create policy "community_comments: admin can manage all" on community_comments
+  for all using (private.is_admin());
+
+-- meetups / meetup_rsvps
+create policy "meetups: host or admin can read own/all" on meetups
+  for select using (auth.uid() = host_id or private.is_admin());
+create policy "meetups: members can read approved" on meetups
+  for select using (status = 'approved' and private.is_member());
+create policy "meetups: members can host own" on meetups
+  for insert with check (auth.uid() = host_id and private.is_member());
+create policy "meetups: admin can update any" on meetups
+  for update using (private.is_admin());
+
+create policy "meetup_rsvps: member can read own" on meetup_rsvps
+  for select using (auth.uid() = profile_id or private.is_admin());
+create policy "meetup_rsvps: host can read rsvps for own meetup" on meetup_rsvps
+  for select using (
+    exists (select 1 from meetups where meetups.id = meetup_rsvps.meetup_id and meetups.host_id = auth.uid())
+  );
+create policy "meetup_rsvps: member can rsvp to approved meetup" on meetup_rsvps
+  for insert with check (
+    auth.uid() = profile_id and private.is_member()
+    and exists (select 1 from meetups where meetups.id = meetup_id and meetups.status = 'approved')
+  );
+create policy "meetup_rsvps: member can cancel own rsvp" on meetup_rsvps
+  for delete using (auth.uid() = profile_id);
 
 -- ─────────────────────────────────────────────────────────────────────────
 -- Seed: starter categories from the Strategy Plan taxonomy

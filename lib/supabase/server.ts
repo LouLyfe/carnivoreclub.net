@@ -52,3 +52,23 @@ export async function getCurrentProfile() {
 
   return profile;
 }
+
+// Helper used by pages/actions that need to know whether the signed-in
+// user has a club membership (any status — see memberships table comment:
+// Stripe isn't connected yet, so 'pending_payment' still grants access).
+export async function getCurrentMembership() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return null;
+
+  const { data: membership } = await supabase
+    .from('memberships')
+    .select('*')
+    .eq('profile_id', user.id)
+    .maybeSingle();
+
+  return membership;
+}
