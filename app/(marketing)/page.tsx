@@ -78,21 +78,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Founder story video */}
+      {/* Marketplace & community video */}
       <section className="bg-charcoal py-20 text-bone">
         <div className="mx-auto max-w-2xl px-6 text-center">
-          <h2 className="font-heading text-3xl md:text-4xl">This is what food alone can do.</h2>
+          <h2 className="font-heading text-3xl md:text-4xl">Stop explaining. Start eating clean.</h2>
           <p className="mt-4 text-base text-bone/70 md:text-lg">
-            Real food. Rigorously approved. A community that never has to look anywhere else.
+            A quick look at the marketplace, the standard behind it, and the community built around it.
           </p>
         </div>
         <div className="mx-auto mt-10 max-w-4xl px-6">
           <div className="relative aspect-video overflow-hidden rounded-lg bg-black">
             <video className="h-full w-full object-cover" controls playsInline preload="metadata">
-              <source src="/videos/founder-story.mp4" type="video/mp4" />
+              <source src="/videos/marketplace-community.mp4" type="video/mp4" />
             </video>
           </div>
-          <p className="mt-3 text-center text-xs text-bone/50">Individual results may vary. Not medical advice.</p>
         </div>
         <div className="mt-6 text-center">
           <Link href="/standards" className="text-sm text-gold underline underline-offset-4">
