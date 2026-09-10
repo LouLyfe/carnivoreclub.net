@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { createClient, getCurrentProfile } from '@/lib/supabase/server';
+import { createClient, getCurrentProfile, getCurrentMembership } from '@/lib/supabase/server';
 
 export default async function MembersDashboardPage() {
   const supabase = createClient();
   const profile = await getCurrentProfile();
+  const membership = await getCurrentMembership();
 
   const [{ data: posts }, { data: meetups }] = await Promise.all([
     supabase
@@ -24,6 +25,16 @@ export default async function MembersDashboardPage() {
     <div className="mx-auto max-w-4xl px-6 py-16">
       <h1 className="text-2xl font-semibold">Welcome{profile?.full_name ? `, ${profile.full_name}` : ''}.</h1>
       <p className="mt-2 text-sm text-charcoal/70">Here's what's happening in the community.</p>
+
+      {membership?.discount_code && (
+        <div className="mt-8 rounded-lg border border-gold/40 bg-charcoal p-5 text-bone">
+          <p className="text-xs uppercase tracking-wide text-gold">Your member discount code</p>
+          <p className="mt-1 font-heading text-2xl tracking-wider">{membership.discount_code}</p>
+          <p className="mt-2 text-xs text-bone/60">
+            Use it at checkout for member pricing once billing is live.
+          </p>
+        </div>
+      )}
 
       <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>

@@ -16,7 +16,7 @@ export default async function MemberAreaLayout({ children }: { children: React.R
           <Link href="/members/meetups" className="font-medium hover:text-oxblood">Meetups</Link>
         </nav>
       </div>
-      {membership.status === 'pending_payment' && (
+      {!membership.stripe_payment_intent_id && (
         <div className="bg-amber-50 px-6 py-2 text-center text-sm text-amber-800">
           Membership billing isn't live yet — you have full access while that's being set up.
         </div>

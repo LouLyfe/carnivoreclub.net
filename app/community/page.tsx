@@ -31,7 +31,7 @@ export default async function CommunityPage() {
           {membership ? (
             <>
               <p className="text-sm text-charcoal/70">
-                You're already a member{membership.status === 'pending_payment' ? ' (billing setup pending)' : ''}.
+                You're already a member{!membership.stripe_payment_intent_id ? ' (billing setup pending)' : ''}.
               </p>
               <Link
                 href="/members"

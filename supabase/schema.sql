@@ -176,18 +176,34 @@ create table if not exists approval_reviews (
 create index if not exists approval_reviews_target_idx on approval_reviews(target_type, target_id);
 
 -- ─────────────────────────────────────────────────────────────────────────
--- memberships — paid club membership. Stripe isn't connected to this
--- project yet, so status starts 'pending_payment' on signup; flip to
--- 'active' once real billing is wired up (webhook or admin action).
+-- memberships — paid club membership. Every member gets a unique
+-- discount_code (their personal member/referral code). Stripe isn't
+-- connected to this project yet: joining creates an 'active' row with
+-- stripe_payment_intent_id null; wire real billing later and set it then.
+-- The discount_code default is applied here so the join flow doesn't have
+-- to generate one itself.
 -- ─────────────────────────────────────────────────────────────────────────
 create table if not exists memberships (
-  id          uuid primary key default gen_random_uuid(),
-  profile_id  uuid not null unique references profiles(id) on delete cascade,
-  tier        text not null default 'standard',
-  status      text not null default 'pending_payment'
-                check (status in ('pending_payment', 'active', 'cancelled')),
-  created_at  timestamptz not null default now()
+  id                        uuid primary key default gen_random_uuid(),
+  profile_id                uuid not null unique references profiles(id) on delete cascade,
+  status                    text not null default 'active'
+                              check (status in ('active', 'cancelled')),
+  discount_code             text not null unique
+                              default ('CC-' || upper(substr(md5(random()::text || clock_timestamp()::text), 1, 7))),
+  phone                     text,
+  address_line1             text,
+  address_line2             text,
+  suburb                    text,
+  state                     text,
+  postcode                  text,
+  birthday                  date,
+  stripe_payment_intent_id  text,
+  joined_at                 timestamptz not null default now()
 );
+-- If the table predates this file, make sure the auto-generated code default
+-- is in place (harmless if already set).
+alter table memberships alter column discount_code set default
+  ('CC-' || upper(substr(md5(random()::text || clock_timestamp()::text), 1, 7)));
 
 -- ─────────────────────────────────────────────────────────────────────────
 -- cart_items — a buyer's current (pre-checkout) cart

@@ -53,9 +53,9 @@ export async function getCurrentProfile() {
   return profile;
 }
 
-// Helper used by pages/actions that need to know whether the signed-in
-// user has a club membership (any status — see memberships table comment:
-// Stripe isn't connected yet, so 'pending_payment' still grants access).
+// Helper used by pages/actions that need the signed-in user's club
+// membership row (includes their discount_code). Returns null if they
+// haven't joined. Payment isn't wired yet, so a row = full access.
 export async function getCurrentMembership() {
   const supabase = createClient();
   const {
