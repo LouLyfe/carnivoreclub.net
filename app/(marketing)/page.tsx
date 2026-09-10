@@ -126,22 +126,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Differentiator */}
-      <section className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <h2 className="font-heading text-3xl md:text-4xl">Not selection. It's rejection.</h2>
-        <p className="mt-5 text-base text-charcoal/70 md:text-lg">
-          Endless choice is easy to find — Amazon, Instagram, and every farmers'-market directory already give you that.
-          What's missing is a trusted filter. Carnivore Club's job is to do the rejecting, so if it's on the site, it has
-          already passed the test.
-        </p>
-        <div className="relative mx-auto mt-10 aspect-[4/3] max-w-md overflow-hidden rounded-lg shadow-lg">
-          <Image
-            src="/approved-stamp.jpg"
-            alt="A branding iron reading APPROVED, resting on a workbench"
-            fill
-            sizes="(min-width: 768px) 448px, 90vw"
-            className="object-cover"
-          />
+      {/* Community membership */}
+      <section className="bg-oxblood py-16 text-center text-bone">
+        <div className="mx-auto max-w-3xl px-6">
+          <h2 className="font-heading text-3xl md:text-4xl">Members shop for less.</h2>
+          <p className="mt-4 text-base text-bone/80 md:text-lg">
+            Join the community for member pricing on every listing, first access to new drops, your own member
+            discount code, and local Meat Ups &amp; dinners with other members near you.
+          </p>
+          <Link
+            href="/community"
+            className="mt-6 inline-block rounded-md bg-bone px-6 py-3 text-sm font-medium text-oxblood hover:bg-bone/90"
+          >
+            Join the community
+          </Link>
         </div>
       </section>
 
@@ -166,48 +164,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Community membership */}
+      {/* Differentiator */}
       <section className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <h2 className="font-heading text-3xl md:text-4xl">Members shop for less.</h2>
+        <h2 className="font-heading text-3xl md:text-4xl">Not selection. It's rejection.</h2>
         <p className="mt-5 text-base text-charcoal/70 md:text-lg">
-          Join the community for member pricing, first access to new listings, and local Meat Ups &amp; dinners with
-          other members near you.
+          Endless choice is easy to find — Amazon, Instagram, and every farmers'-market directory already give you that.
+          What's missing is a trusted filter. Carnivore Club's job is to do the rejecting, so if it's on the site, it has
+          already passed the test.
         </p>
-        <Link
-          href="/community"
-          className="mt-8 inline-block rounded-md bg-oxblood px-6 py-3 text-sm font-medium text-bone hover:bg-oxblood/90"
-        >
-          Join the community
-        </Link>
-      </section>
-
-      {/* Trust badges */}
-      <section className="border-t border-charcoal/10 bg-bone py-20">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-heading text-3xl md:text-4xl">A trust shortcut, right on every listing</h2>
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Approved</span>
-            <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Club Selection</span>
-            <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Founder's Pick</span>
-          </div>
-          <p className="mx-auto mt-6 max-w-lg text-sm text-charcoal/70">
-            Approved means it cleared all five pillars. Club Selection marks exceptional traceability and quality.
-            Founder's Pick is reserved for a small number of products personally vouched for — used sparingly, so it stays meaningful.
-          </p>
+        <div className="relative mx-auto mt-10 aspect-[4/3] max-w-md overflow-hidden rounded-lg shadow-lg">
+          <Image
+            src="/approved-stamp.jpg"
+            alt="A branding iron reading APPROVED, resting on a workbench"
+            fill
+            sizes="(min-width: 768px) 448px, 90vw"
+            className="object-cover"
+          />
         </div>
       </section>
 
       {/* Seller CTA */}
-      <section className="bg-oxblood py-16 text-center text-bone">
+      <section className="border-t border-charcoal/10 bg-bone py-16 text-center">
         <div className="mx-auto max-w-2xl px-6">
           <h2 className="font-heading text-3xl md:text-4xl">Producing something that belongs here?</h2>
-          <p className="mt-4 text-base text-bone/80 md:text-lg">
+          <p className="mt-4 text-base text-charcoal/70 md:text-lg">
             Regenerative farms, tallow renderers, organ-meat specialists, bone broth makers — if it's genuinely
             carnivore and you can back it up, we want to hear from you.
           </p>
-          <Link href="/seller/apply" className="mt-6 inline-block rounded-md bg-bone px-6 py-3 text-sm font-medium text-oxblood hover:bg-bone/90">
+          <Link href="/seller/apply" className="mt-6 inline-block rounded-md bg-oxblood px-6 py-3 text-sm font-medium text-bone hover:bg-oxblood/90">
             Apply to sell
           </Link>
+        </div>
+      </section>
+
+      {/* Trust the brand */}
+      <section className="bg-charcoal py-20 text-bone">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="font-heading text-3xl md:text-4xl">Trust the brand.</h2>
+          <p className="mx-auto mt-4 max-w-lg text-base text-bone/70 md:text-lg">
+            Every listing carries the stamp that says it cleared the five-pillar review — and a member discount.
+            The stamp is why you don't have to check. The discount is why you come back.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Approved</span>
+            <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Club Selection</span>
+            <span className="rounded-full border border-gold/40 bg-charcoal px-4 py-1.5 text-sm font-medium text-gold">Founder's Pick</span>
+          </div>
+          <p className="mx-auto mt-6 max-w-lg text-xs text-bone/50">
+            Approved means it cleared all five pillars. Club Selection marks exceptional traceability and quality.
+            Founder's Pick is reserved for a small number of products personally vouched for.
+          </p>
         </div>
       </section>
     </div>
