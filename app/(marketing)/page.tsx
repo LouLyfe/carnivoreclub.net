@@ -146,7 +146,12 @@ export default function HomePage() {
       {/* Five pillars */}
       <section className="bg-charcoal py-20 text-bone">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="font-heading text-center text-3xl md:text-4xl">Every listing clears five pillars — no exceptions</h2>
+          <p className="mx-auto max-w-2xl text-center text-base text-bone/70 md:text-lg">
+            Want to know why we have chosen these products? Because they have each been tested and measured to
+            achieve a high standard rating with no toxins or hidden nasties.
+          </p>
+          <p className="mt-3 text-center font-heading text-lg text-gold md:text-xl">Pure, clean and A grade.</p>
+          <h2 className="mt-10 font-heading text-center text-3xl md:text-4xl">Every listing clears five pillars — no exceptions</h2>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {PILLARS.map((p, i) => (
               <div key={p.title} className="rounded-lg border border-bone/10 p-5">
