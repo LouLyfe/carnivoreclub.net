@@ -11,7 +11,7 @@ export default async function CommunityPage() {
       <h1 className="mt-2 font-heading text-3xl md:text-4xl">A community that never has to look anywhere else.</h1>
       <p className="mt-4 text-base text-charcoal/70 md:text-lg">
         Membership gets you into the members-only discussion feed and lets you find — or host — local carnivore
-        meetups and dinners with other members near you.
+        MeatUps and dinners with other members near you.
       </p>
 
       <div className="mt-10 rounded-lg border border-charcoal/10 bg-white p-6">
@@ -22,8 +22,8 @@ export default async function CommunityPage() {
             members reply.
           </li>
           <li>
-            <span className="font-medium">Local meetups &amp; dinners</span> — find one near you, or host your own
-            (every meetup is reviewed before it's listed, same standard as our sellers and products).
+            <span className="font-medium">Local MeatUps &amp; dinners</span> — find one near you, or host your own
+            (every MeatUp is reviewed before it's listed, same standard as our sellers and products).
           </li>
         </ul>
 
