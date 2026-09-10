@@ -100,6 +100,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Categories */}
+      <section className="mx-auto max-w-5xl px-6 py-20">
+        <h2 className="font-heading text-center text-3xl md:text-4xl">Shop by category</h2>
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {CATEGORIES.map((c) => (
+            <Link key={c.slug} href={`/shop/${c.slug}`} className="group block">
+              <div className="relative aspect-square overflow-hidden rounded-lg bg-charcoal/5">
+                <Image
+                  src={c.image}
+                  alt={c.name}
+                  fill
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                  className="object-cover transition group-hover:scale-105"
+                />
+              </div>
+              <p className="mt-2 text-sm font-medium">{c.name}</p>
+            </Link>
+          ))}
+        </div>
+        <div className="mt-8 text-center">
+          <Link href="/shop" className="text-sm text-oxblood underline underline-offset-4">
+            View all categories
+          </Link>
+        </div>
+      </section>
+
       {/* Differentiator */}
       <section className="mx-auto max-w-3xl px-6 py-20 text-center">
         <h2 className="font-heading text-3xl md:text-4xl">Not selection. It's rejection.</h2>
@@ -140,30 +166,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="mx-auto max-w-5xl px-6 py-20">
-        <h2 className="font-heading text-center text-3xl md:text-4xl">Shop by category</h2>
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {CATEGORIES.map((c) => (
-            <Link key={c.slug} href={`/shop/${c.slug}`} className="group block">
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-charcoal/5">
-                <Image
-                  src={c.image}
-                  alt={c.name}
-                  fill
-                  sizes="(min-width: 640px) 25vw, 50vw"
-                  className="object-cover transition group-hover:scale-105"
-                />
-              </div>
-              <p className="mt-2 text-sm font-medium">{c.name}</p>
-            </Link>
-          ))}
-        </div>
-        <div className="mt-8 text-center">
-          <Link href="/shop" className="text-sm text-oxblood underline underline-offset-4">
-            View all categories
-          </Link>
-        </div>
+      {/* Community membership */}
+      <section className="mx-auto max-w-3xl px-6 py-20 text-center">
+        <h2 className="font-heading text-3xl md:text-4xl">Members shop for less.</h2>
+        <p className="mt-5 text-base text-charcoal/70 md:text-lg">
+          Join the community for member pricing, first access to new listings, and local meetups &amp; dinners with
+          other members near you.
+        </p>
+        <Link
+          href="/community"
+          className="mt-8 inline-block rounded-md bg-oxblood px-6 py-3 text-sm font-medium text-bone hover:bg-oxblood/90"
+        >
+          Join the community
+        </Link>
       </section>
 
       {/* Trust badges */}
