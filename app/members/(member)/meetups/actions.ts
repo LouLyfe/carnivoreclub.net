@@ -38,7 +38,7 @@ export async function hostMeetup(formData: FormData) {
   }
 
   revalidatePath('/members/meetups');
-  redirect('/members/meetups?success=' + encodeURIComponent("Meetup submitted — it'll appear once approved."));
+  redirect('/members/meetups?success=' + encodeURIComponent("Meat Up submitted — it'll appear once approved."));
 }
 
 export async function rsvpMeetup(formData: FormData) {

@@ -25,7 +25,7 @@ export default async function AdminHomePage() {
     { label: 'Sellers awaiting review', count: pendingSellers ?? 0, href: '/admin/sellers' },
     { label: 'Products awaiting review', count: pendingProducts ?? 0, href: '/admin/products' },
     { label: 'Recipes awaiting review', count: pendingRecipes ?? 0, href: '/admin/recipes' },
-    { label: 'Meetups awaiting review', count: pendingMeetups ?? 0, href: '/admin/meetups' },
+    { label: 'Meat Ups awaiting review', count: pendingMeetups ?? 0, href: '/admin/meetups' },
   ];
 
   return (

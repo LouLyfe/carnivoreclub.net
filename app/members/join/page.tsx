@@ -26,7 +26,7 @@ export default async function JoinMembershipPage({
     <div className="mx-auto max-w-xl px-6 py-16">
       <h1 className="text-2xl font-semibold">Join the Carnivore Club community</h1>
       <p className="mt-2 text-sm text-charcoal/70">
-        Get your personal member discount code, plus access to the members feed and local MeatUps &amp; dinners.
+        Get your personal member discount code, plus access to the members feed and local Meat Ups &amp; dinners.
         Membership billing isn't connected yet — joining now gives you full access at no charge until it is.
       </p>
 

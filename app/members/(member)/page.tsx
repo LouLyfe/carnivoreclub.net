@@ -55,7 +55,7 @@ export default async function MembersDashboardPage() {
 
         <div>
           <div className="flex items-center justify-between">
-            <h2 className="font-medium">Upcoming meetups</h2>
+            <h2 className="font-medium">Upcoming Meat Ups</h2>
             <Link href="/members/meetups" className="text-sm text-oxblood underline underline-offset-4">View all</Link>
           </div>
           <div className="mt-4 flex flex-col gap-3">
@@ -67,7 +67,7 @@ export default async function MembersDashboardPage() {
                 </p>
               </div>
             ))}
-            {!meetups?.length && <p className="text-sm text-charcoal/60">No upcoming meetups yet — host one.</p>}
+            {!meetups?.length && <p className="text-sm text-charcoal/60">No upcoming Meat Ups yet — host one.</p>}
           </div>
         </div>
       </div>

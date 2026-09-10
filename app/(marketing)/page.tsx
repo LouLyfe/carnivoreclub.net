@@ -170,7 +170,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-3xl px-6 py-20 text-center">
         <h2 className="font-heading text-3xl md:text-4xl">Members shop for less.</h2>
         <p className="mt-5 text-base text-charcoal/70 md:text-lg">
-          Join the community for member pricing, first access to new listings, and local meetups &amp; dinners with
+          Join the community for member pricing, first access to new listings, and local Meat Ups &amp; dinners with
           other members near you.
         </p>
         <Link

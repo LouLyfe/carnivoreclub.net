@@ -13,7 +13,7 @@ export default async function MemberAreaLayout({ children }: { children: React.R
         <nav className="mx-auto flex max-w-4xl gap-6 px-6 py-3 text-sm">
           <Link href="/members" className="font-medium hover:text-oxblood">Dashboard</Link>
           <Link href="/members/feed" className="font-medium hover:text-oxblood">Feed</Link>
-          <Link href="/members/meetups" className="font-medium hover:text-oxblood">Meetups</Link>
+          <Link href="/members/meetups" className="font-medium hover:text-oxblood">Meat Ups</Link>
         </nav>
       </div>
       {!membership.stripe_payment_intent_id && (

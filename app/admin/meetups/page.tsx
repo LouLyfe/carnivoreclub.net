@@ -11,7 +11,7 @@ export default async function AdminMeetupsPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
-      <h1 className="text-2xl font-semibold">Meetups &amp; dinners</h1>
+      <h1 className="text-2xl font-semibold">Meat Ups &amp; dinners</h1>
 
       <div className="mt-8 divide-y divide-charcoal/10 rounded-lg border border-charcoal/10 bg-white">
         {meetups?.map((m) => (
@@ -29,7 +29,7 @@ export default async function AdminMeetupsPage() {
             <StatusBadge status={m.status} />
           </Link>
         ))}
-        {!meetups?.length && <p className="px-4 py-6 text-sm text-charcoal/70">No meetups submitted yet.</p>}
+        {!meetups?.length && <p className="px-4 py-6 text-sm text-charcoal/70">No Meat Ups submitted yet.</p>}
       </div>
     </div>
   );
